@@ -1,23 +1,22 @@
 $(document).ready(function() {
-   $('#button-submit').click(submitName);
-   setInterval(getMemory, 1000);
+   $('#form-zip').submit(submitForm)
 });
 
-function submitName() {
-    var name = $('#input-name').val();
+function submitForm(e) {
+    e.preventDefault();
+    
+    var city = $('#input-city').val();
+    
+    $.get('http://localhost:4000/zips/' + city, {}, function (data) {
+        var $selectStates = $('#select-states');
+        var $selectZips = $('#select-zips');
 
-    $.get('http://localhost:4000/hello', {name: name}, function (data) {
-        $('#response').text(data);
+        var states = [];
+
+        $.each(data, function(idx, val) {
+            if (states.indexOf(val.State > -1) {
+                states.push(val.State);
+            }
+        });
     });
-}
-
-function getMemory() {
-    $.get(
-        'http://localhost:4000/memory',
-        {},
-        function (data) {
-            $('#memory').text(data.Alloc);
-        },
-        'json'
-    );
 }
