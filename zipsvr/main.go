@@ -36,7 +36,7 @@ func main() {
 		addr = ":80"
 	}
 
-	zips, err := models.LoadZips("zipsvr/zips.csv")
+	zips, err := models.LoadZips("zips.csv")
 	if err != nil {
 		log.Fatalf("error loading file: %v", err)
 	}

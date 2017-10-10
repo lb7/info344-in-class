@@ -14,7 +14,7 @@ function submitForm(e) {
         var states = [];
 
         $.each(data, function(idx, val) {
-            if (states.indexOf(val.State > -1) {
+            if (states.indexOf(val.State > -1)) {
                 states.push(val.State);
             }
         });
