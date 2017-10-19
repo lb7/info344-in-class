@@ -5,6 +5,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"gopkg.in/mgo.v2"
+	"github.com/lb7/info344-in-class/tasksvr/models/tasks"
+	"github.com/lb7/info344-in-class/tasksvr/handlers"
 )
 
 const defaultAddr = ":80"
@@ -18,10 +21,17 @@ func main() {
 	//TODO: make connection to the DBMS
 	//construct the appropriate tasks.Store
 	//construct the handlers.Context
+	mongoSess, err := mgo.Dial("localhost")
+	if err != nil {
+		log.Fatalf("error dialing mongo: %v", err)
+	}
+	mongoStore := tasks.NewMongoStore(mongoSess, "tasks", "tasks")
+
+	handlerCtx := handlers.NewHandlerContext(mongoStore)
 
 	mux := http.NewServeMux()
-	//mux.HandleFunc("/v1/tasks", TODO: add TasksHandler )
-	//mux.HandleFunc("/v1/tasks/", TODO: add SpecificTaskHandler )
+	mux.HandleFunc("/v1/tasks", handlerCtx.TasksHandler)
+	mux.HandleFunc("/v1/tasks/", handlerCtx.SpecificTaskHandler)
 
 	fmt.Printf("server is listening at http://%s...\n", addr)
 	log.Fatal(http.ListenAndServe(addr, mux))
